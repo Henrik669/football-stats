@@ -1,0 +1,94 @@
+football-stats/
+├── backend/
+│   ├── app.py
+│   ├── models.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── firebase-service-account.json (nicht enthalten, da sensibel)
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   └── sw.js
+│   ├── src/
+│   │   ├── App.js
+│   │   ├── components/
+│   │   │   ├── Notifications.js
+│   │   │   ├── Favorites.js
+│   │   │   └── Dashboard.js
+│   │   └── index.js
+│   ├── package.json
+│   ├── .env.example
+│   └── Dockerfile
+├── docker-compose.yml
+└── README.md
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost/football'
+db = SQLAlchemy(app)
+
+@app.route("/")
+def home():
+    return jsonify({"message": "Backend is running!"})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+from app import db
+
+class Team(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+flask
+flask-sqlalchemy
+DATABASE_URL=postgresql://user:password@localhost/football
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Stats</title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
+import React from 'react';
+
+const App = () => {
+    return (
+        <div>
+            <h1>Welcome to Football Stats</h1>
+        </div>
+    );
+};
+
+export default App;
+{
+  "name": "football-stats-frontend",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "5.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  }
+}
+REACT_APP_BACKEND_URL=http://localhost:5000
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
